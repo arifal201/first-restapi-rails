@@ -1,10 +1,15 @@
 module Api
     class UsersController < Api::ApplicationController
-      skip_before_action :doorkeeper_authorize!, only: %i[create]
+      skip_before_action :doorkeeper_authorize!, only: %i[create index]
+
+      def index
+        @users = User.all
+        return render json: @users
+      end
   
       def create
-        user = User.new(email: user_params[:email], password: user_params[:password])
-  
+        user = User.new(user_params)
+
         client_app = Doorkeeper::Application.find_by(uid: params[:client_id])
   
         return render(json: { error: 'Invalid client ID'}, status: 403) unless client_app
@@ -22,15 +27,11 @@ module Api
           # return json containing access token and refresh token
           # so that user won't need to call login API right after registration
           render(json: {
-            user: {
-              id: user.id,
-              email: user.email,
-              access_token: access_token.token,
-              token_type: 'bearer',
-              expires_in: access_token.expires_in,
-              refresh_token: access_token.refresh_token,
-              created_at: access_token.created_at.to_time.to_i
-            }
+            token_type: 'bearer',
+            expires_in: access_token.expires_in,
+            refresh_token: access_token.refresh_token,
+            created_at: access_token.created_at.to_time.to_i,
+            user:  UserSerializer.new(user),
           })
         else
           render(json: { error: user.errors.full_messages }, status: 422)
@@ -40,7 +41,13 @@ module Api
       private
   
       def user_params
-        params.permit(:email, :password)
+        params.fetch(:user, {})
+                .permit(:email, :password,
+                        user_profile_attributes: %i[
+                          id first_name last_name 
+                          full_name gender birth_date
+                      ])
+        
       end
   
       def generate_refresh_token

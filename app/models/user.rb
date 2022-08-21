@@ -6,6 +6,10 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   validates :email, format: URI::MailTo::EMAIL_REGEXP
+
+  has_one :user_profile, dependent: :destroy
+
+  accepts_nested_attributes_for :user_profile
   
   # the authenticate method from devise documentation
   def self.authenticate(email, password)

@@ -1,6 +1,7 @@
 module Api
   class BookmarksController < ApplicationController
       before_action :set_bookmark, only: [:show, :update, :destroy]
+      skip_before_action :doorkeeper_authorize!, only: %i[index]
   
       # GET /bookmarks
       def index
@@ -13,10 +14,14 @@ module Api
       def show
         render json: @bookmark
       end
-  
+
       # POST /bookmarks
       def create
         @bookmark = Bookmark.new(bookmark_params)
+
+        client_app = Doorkeeper::Application.find_by(uid: params[:client_id])
+  
+        return render(json: { error: 'Invalid client ID'}, status: 403) unless client_app
   
         if @bookmark.save
           render json: @bookmark, status: :created

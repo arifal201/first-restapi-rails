@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
-    resources :users, only: %i[create]
+    resources :users, only: %i[create index]
     resources :bookmarks
   end
 

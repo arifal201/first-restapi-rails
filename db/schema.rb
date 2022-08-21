@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_16_033953) do
+ActiveRecord::Schema.define(version: 2022_08_18_072421) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,30 @@ ActiveRecord::Schema.define(version: 2022_08_16_033953) do
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
+  create_table "user_models", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "full_name"
+    t.string "birth_date"
+    t.string "gender"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_user_models_on_user_id"
+  end
+
+  create_table "user_profiles", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "full_name"
+    t.string "birth_date"
+    t.string "gender"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_user_profiles_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -63,4 +87,5 @@ ActiveRecord::Schema.define(version: 2022_08_16_033953) do
   end
 
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
+  add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
 end
