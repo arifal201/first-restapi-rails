@@ -3,8 +3,8 @@ module Api
       skip_before_action :doorkeeper_authorize!, only: %i[create index]
 
       def index
-        @users = User.all
-        return render json: @users
+        users = User.all
+        render :json => users, each_serializer: UserSerializer
       end
   
       def create
