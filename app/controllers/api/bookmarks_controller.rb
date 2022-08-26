@@ -1,13 +1,18 @@
 module Api
   class BookmarksController < ApplicationController
+      # include ActionController::Serialization
       before_action :set_bookmark, only: [:show, :update, :destroy]
-      skip_before_action :doorkeeper_authorize!, only: %i[index]
+      skip_before_action :doorkeeper_authorize!, only: %i[index create]
   
       # GET /bookmarks
       def index
         @bookmarks = Bookmark.all
   
         render json: @bookmarks
+        # render :json => @bookmarks, each_serializer: BookmarkSerializer
+        # render(json: {
+        #   bookmarks: BookmarkSerializer.new(@bookmarks)
+        # })
       end
   
       # GET /bookmarks/1
@@ -18,10 +23,6 @@ module Api
       # POST /bookmarks
       def create
         @bookmark = Bookmark.new(bookmark_params)
-
-        client_app = Doorkeeper::Application.find_by(uid: params[:client_id])
-  
-        return render(json: { error: 'Invalid client ID'}, status: 403) unless client_app
   
         if @bookmark.save
           render json: @bookmark, status: :created
@@ -42,6 +43,11 @@ module Api
       # DELETE /bookmarks/1
       def destroy
         @bookmark.destroy
+        if @bookmark.destroy
+          render json: @bookmark
+        else
+          render json: @bookmark.errors, status: :unprocessable_entity
+        end
       end
   
       private

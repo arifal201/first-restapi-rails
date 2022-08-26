@@ -11,6 +11,12 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'devise', '~> 4.7.3'
 
 gem 'doorkeeper'
+
+gem 'pg_search', '2.3.5'
+
+gem 'kaminari', '~> 1.2.1'
+
+# gem 'ransack', github: 'activerecord-hackery/ransack'
 # Use Puma as the app server
 gem 'puma', '~> 4.1'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
