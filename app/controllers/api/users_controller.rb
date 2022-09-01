@@ -1,5 +1,5 @@
 module Api
-    class UsersController < Api::ApplicationController
+    class UsersController < ApplicationController
       skip_before_action :doorkeeper_authorize!, only: %i[create]
       before_action :user_params, only: %i[create]
       before_action :search_user, only: %i[index]

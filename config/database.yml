@@ -79,7 +79,14 @@ test:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
 production:
-  <<: *default
+  # <<: *default
+  # database: restapi_rails_production
+  # username: restapi_rails
+  # password: <%= ENV['RESTAPI_RAILS_DATABASE_PASSWORD'] %>
+  adapter: postgresql
+  encoding: unicode
+  host: localhost
+  pool: 5
   database: restapi_rails_production
-  username: restapi_rails
+  username: arifal
   password: <%= ENV['RESTAPI_RAILS_DATABASE_PASSWORD'] %>
