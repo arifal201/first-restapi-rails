@@ -1,7 +1,7 @@
 module Api
   class CustomersController < ApplicationController
     before_action :set_customer, only: [:show, :update, :destroy]
-    # skip_before_action :doorkeeper_authorize!, only: %i[index]
+    skip_before_action :doorkeeper_authorize!, only: %i[index]
     before_action :search_customer, only: %i[index]
     before_action :customer_params, only: %i[create]
   
@@ -54,6 +54,7 @@ module Api
         else
           Customer
         end
+        @customers = @customers.ransack(params[:q]).result
       end
 
       # Use callbacks to share common setup or constraints between actions.
@@ -65,7 +66,7 @@ module Api
   
       # Only allow a trusted parameter "white list" through.
       def customer_params
-        params.require(:customer).permit(:name, :address, :phone)
+        params.require(:customer).permit(:name, :address, :phone, :picture)
       rescue StandardError
         response_error("Terjadi Kesalahan Harap Hubungi Admin", 502)
       end

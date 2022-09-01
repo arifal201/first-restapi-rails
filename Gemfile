@@ -38,6 +38,17 @@ gem 'enumerize', '~> 2.1', '>= 2.1.2'
 
 gem 'active_model_serializers', '~> 0.10.10'
 
+gem 'carrierwave', '~> 1.0'
+
+gem 'carrierwave-aws', '~> 1.4.0'
+
+gem 'mini_magick', '~> 4.11.0'
+
+gem 'fog-aws', '~> 3.8.0'
+
+gem 'dotenv-rails', '~> 2.7.6'
+
+gem 'ransack'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
 

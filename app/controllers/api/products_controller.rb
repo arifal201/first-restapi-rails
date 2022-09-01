@@ -55,6 +55,7 @@ module Api
         else
           Product
         end
+        @products = @products.ransack(params[:q]).result
       end
 
       # Use callbacks to share common setup or constraints between actions.
@@ -66,7 +67,7 @@ module Api
   
       # Only allow a trusted parameter "white list" through.
       def product_params
-        params.require(:product).permit(:name, :price, :description)
+        params.require(:product).permit(:name, :price, :description, :image)
       end
   end
 end
